@@ -43,10 +43,11 @@ app.post("/api/bugs", (req, res) => {
 const clientBuildPath = path.join(__dirname, "../client/dist");
 app.use(express.static(clientBuildPath));
 
-// All other routes -> serve React app
-app.get("*", (req, res) => {
+// Catch-all for React routes
+app.get(/^\/.*$/, (req, res) => {
   res.sendFile(path.join(clientBuildPath, "index.html"));
 });
+
 
 // Start server
 app.listen(PORT, () => {
