@@ -1,48 +1,54 @@
 const express = require("express");
-const app = express();
+const path = require("path");
 const cors = require("cors");
 
-const corsOptions = {
-    origin: ["http://localhost:5173"],
-};
-
-const PORT = 8080;
+const app = express();
+const PORT = process.env.PORT || 8080;
 
 // Middleware
+const corsOptions = process.env.NODE_ENV === "production"
+  ? {} // allow all
+  : { origin: ["http://localhost:5173"] };
 app.use(cors(corsOptions));
 app.use(express.json()); // parse JSON request bodies
 
 // Data store
-let bugs = [];          // store the bugs
-let bugIdCounter = 1;   // auto-incrementing ID
+let bugs = [];
+let bugIdCounter = 1;
 
-// GET all bugs
+// API routes
 app.get("/api/bugs", (req, res) => {
-    res.json({ bugs });
+  res.json({ bugs });
 });
 
-// POST a new bug
 app.post("/api/bugs", (req, res) => {
-    const { severity, description, state } = req.body;
+  const { severity, description, state } = req.body;
 
-    // Basic validation (optional but useful)
-    if (!severity || !description || !state) {
-        return res.status(400).json({ error: "severity, description, and state are required" });
-    }
+  if (!severity || !description || !state) {
+    return res.status(400).json({ error: "severity, description, and state are required" });
+  }
 
-    const newBug = {
-        id: bugIdCounter++, // auto-number
-        severity,
-        description,
-        state
-    };
+  const newBug = {
+    id: bugIdCounter++,
+    severity,
+    description,
+    state,
+  };
 
-    bugs.push(newBug);
+  bugs.push(newBug);
+  res.status(201).json(newBug);
+});
 
-    res.status(201).json(newBug); // 201 = created
+// Serve React build (production)
+const clientBuildPath = path.join(__dirname, "../client/dist");
+app.use(express.static(clientBuildPath));
+
+// All other routes -> serve React app
+app.get("*", (req, res) => {
+  res.sendFile(path.join(clientBuildPath, "index.html"));
 });
 
 // Start server
 app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
