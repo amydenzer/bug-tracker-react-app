@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 8080;
 
 // Middleware
 const corsOptions = process.env.NODE_ENV === "production"
-  ? {} // allow all
+  ? {} // allow all in production
   : { origin: ["http://localhost:5173"] };
 app.use(cors(corsOptions));
 app.use(express.json()); // parse JSON request bodies
