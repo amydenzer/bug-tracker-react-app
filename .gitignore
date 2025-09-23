@@ -1,0 +1,25 @@
+# Node modules
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Build outputs
+client/dist/
+dist/
+
+# OS / editor files
+.DS_Store
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
