@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node server/server.js",
-    "heroku-postbuild": "cd client && npm install && npx vite build"
+    "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "engines": {
     "node": "20.x"
