@@ -9,7 +9,7 @@ function App() {
   });
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/bugs")
+    fetch("/api/bugs")
       .then((res) => res.json())
       .then((data) => setBugs(data.bugs))
       .catch((err) => console.error("Fetch error:", err));
@@ -21,7 +21,7 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch("http://localhost:8080/api/bugs", {
+    fetch("/api/bugs", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
